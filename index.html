@@ -49,6 +49,11 @@
   textarea{resize:vertical;min-height:74px;margin-top:9px}
   .btn{width:100%;background:var(--sage);color:#fff;font-weight:500;font-size:15px;border:none;padding:13px;margin-top:10px;cursor:pointer;font-family:inherit}
   .btn:active{opacity:.9} .btn:disabled{background:#BBD0B6}
+  .jlinks{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+  .jlinks a{flex:1;min-width:140px;text-align:center;border:1px solid var(--line);background:#fff;
+    color:var(--sage-deep);font-weight:500;font-size:13px;padding:11px 10px;cursor:pointer}
+  .jlinks a.solid{background:var(--sage-soft);border-color:#BCD3B6}
+  .jlinks a:active{opacity:.85}
 
   .toggle{display:flex;gap:7px;padding:3px 12px 4px}
   .toggle button{flex:1;font-family:inherit;font-size:13px;font-weight:500;padding:9px;cursor:pointer;
@@ -111,14 +116,21 @@
     <div class="me-line" id="meLine">닉네임을 적으면 내 현황이 보여요</div>
   </div>
 
-  <!-- 오늘의 미션 + 제출 -->
+  <!-- ⓐ 오늘의 줍줍 (읽기) -->
   <div class="card">
-    <span class="badge" id="dayBadge">잔소리 —</span>
-    <div class="hd mtitle" id="mTitle">오늘의 미션을 불러오는 중…</div>
+    <span class="badge" id="dayBadge">오늘의 줍줍 #—</span>
+    <div class="hd mtitle" id="mTitle">오늘의 줍줍을 불러오는 중…</div>
     <div class="prompt" id="mPrompt"></div>
+    <div class="jlinks" id="jLinks"></div>
+  </div>
+
+  <!-- ⓑ 오늘 너의 차례 (제출) -->
+  <div class="card">
+    <div class="hd mtitle">오늘 너의 차례 ✍️</div>
+    <div class="prompt" id="taskPrompt">네 계정은 어느 쪽이야? 우리집 첫 문장 하나만 적어줘요.</div>
     <input id="nick" placeholder="매일 같은 닉네임으로 (예: 결영이네)" maxlength="20" />
-    <textarea id="answer" placeholder="여기에 답을 적어주세요. 짧아도 괜찮아요!"></textarea>
-    <button class="btn" id="submitBtn" onclick="submitAnswer()">제출하기</button>
+    <textarea id="answer" placeholder="우리집 첫 문장 적기 (예: 5평 신혼집에서…)"></textarea>
+    <button class="btn" id="submitBtn" onclick="submitAnswer()">올리기</button>
   </div>
 
   <!-- 피드 -->
@@ -141,8 +153,8 @@
 
   <!-- 전환 CTA -->
   <div class="cta">
-    <div class="hd t">혼자 하면 작심삼일, 같이 하면 됩니다</div>
-    <p>SNS 첫 세팅부터 우리 부부에게 맞는 수익화까지 — 원팀 프로젝트에서 끝까지 같이.</p>
+    <div class="hd t">혼자 하면 작심삼일, 같이 하면 터집니다</div>
+    <p>오늘 배운 후킹, 우리 부부 계정에 진짜 심는 건 — 원팀 프로젝트에서 끝까지 같이.</p>
     <a id="ctaDetail" href="#" target="_blank" rel="noopener">원팀 프로젝트 보러가기 →</a>
   </div>
 
@@ -151,7 +163,7 @@
 
 <script>
 /* ===== ⚙️ 설정 — 결영님이 바꾸는 곳 ===== */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyqFUxaLiqoGO5J-t1VH8bjuQ7BfWu7NlqMRxjtBB_VSZtd2VnQ_E6hyAYkhbkesg9_iQ/exec';  // GAS 웹앱 배포 URL
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbydAJ71BPOZVnU3-2A5hFQ405UzWRc7PgU-uBRmgERvYfUT-d7AtS2zzO0oWWe9sIFpYg/exec';  // GAS 웹앱 배포 URL
 const DETAIL_PAGE_URL = 'https://oneteamm.netlify.app/?v=2';  // 원팀프로젝트 상세페이지(전환)
 const POINTS_PER = 10;
 /* 회차·미션 내용은 코드가 아니라 구글시트(missions/config)에서 관리됩니다. */
@@ -181,7 +193,7 @@ function fetchAll(){
     try{
       state.currentDay=Number(d.currentDay)||1;
       state.missions={};
-      (d.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt}; });
+      (d.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt,reelUrl:m.reelUrl||'',cafeUrl:m.cafeUrl||'',taskPrompt:m.taskPrompt||''}; });
       state.rows=d.rows||[]; state.hearts=d.hearts||[]; state.comments=d.comments||[];
     }catch(e){}
     renderMission(); render();
@@ -194,10 +206,15 @@ function fetchAll(){
 
 function renderMission(){
   const day = state.currentDay||0;
-  const m = state.missions[day] || {title:'미션을 준비 중이에요', prompt:''};
-  $('dayBadge').textContent = '잔소리 '+day+'일차';
+  const m = state.missions[day] || {title:'줍줍을 준비 중이에요', prompt:'', reelUrl:'', cafeUrl:'', taskPrompt:''};
+  $('dayBadge').textContent = '오늘의 줍줍 #'+day;
   $('mTitle').textContent = m.title;
   $('mPrompt').textContent = m.prompt;
+  let lk='';
+  if(m.reelUrl) lk += '<a href="'+esc(m.reelUrl)+'" target="_blank" rel="noopener">▶ 원본 릴스 보기</a>';
+  if(m.cafeUrl) lk += '<a class="solid" href="'+esc(m.cafeUrl)+'" target="_blank" rel="noopener">📘 왜 터졌는지 카페에서 ›</a>';
+  $('jLinks').innerHTML = lk;
+  if(m.taskPrompt) $('taskPrompt').textContent = m.taskPrompt;
 }
 
 async function submitAnswer(){
