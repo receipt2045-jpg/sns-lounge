@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>결영이네 재테크 끝판왕 [원팀 프로젝트]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sage:#8FAF8A; --sage-dark:#6E9168; --sage-deep:#4F6E47; --sage-soft:#E8F0E6;
+    --line:#DDE6D9; --line2:#E6EDE3; --bg:#F4F7F2; --card:#FFFFFF; --ink:#2E332C; --muted:#7A857A;
+  }
+  *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'IBM Plex Sans KR',sans-serif;font-weight:300;background:var(--bg);color:var(--ink);
+    line-height:1.65;font-size:15px}
+  .hd{font-family:'Pretendard Variable',Pretendard,sans-serif;font-weight:800;letter-spacing:-.3px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:600px;margin:0 auto;padding-bottom:50px}
+
+  .nav{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:12px 16px}
+  .brand{display:flex;align-items:center;gap:8px;min-width:0}
+  .logo{width:27px;height:27px;flex:none;background:var(--sage);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .brand b{font-size:14.5px;line-height:1.3}
+  .navlink{flex:none}
+  .navlink{color:var(--sage-deep);font-weight:500;font-size:13px}
+
+  .card{background:var(--card);border:1px solid var(--line);padding:16px;margin:11px 12px}
+  .badge{display:inline-block;background:var(--sage-soft);color:var(--sage-deep);font-weight:500;font-size:12px;padding:4px 10px}
+
+  .stat{display:flex;text-align:center}
+  .stat>div{flex:1;padding:14px 8px}
+  .stat>div+div{border-left:1px solid var(--line2)}
+  .stat .cap{font-size:12px;color:var(--muted)}
+  .stat .num{font-weight:700;font-size:22px;margin-top:3px}
+  .stat .num small{font-size:13px;font-weight:500;color:var(--muted);margin-left:2px}
+  .me-line{border-top:1px solid var(--line2);padding:9px 14px;font-size:12px;color:var(--muted);text-align:center}
+  .me-line b{color:var(--sage-deep);font-weight:500}
+
+  .mtitle{font-size:18px;margin:11px 0 4px}
+  .prompt{background:var(--sage-soft);padding:11px 13px;font-size:13.5px;color:#46513f;line-height:1.6;margin:9px 0 13px;white-space:pre-line}
+  input,textarea{width:100%;font-family:inherit;font-size:15px;font-weight:300;border:1px solid #D4E0CF;
+    background:#fff;color:var(--ink);padding:12px 13px;outline:none}
+  input::placeholder,textarea::placeholder{color:#A9B3A5}
+  input:focus,textarea:focus{border-color:var(--sage)}
+  textarea{resize:vertical;min-height:74px;margin-top:9px}
+  .btn{width:100%;background:var(--sage);color:#fff;font-weight:500;font-size:15px;border:none;padding:13px;margin-top:10px;cursor:pointer;font-family:inherit}
+  .btn:active{opacity:.9} .btn:disabled{background:#BBD0B6}
+
+  .toggle{display:flex;gap:7px;padding:3px 12px 4px}
+  .toggle button{flex:1;font-family:inherit;font-size:13px;font-weight:500;padding:9px;cursor:pointer;
+    background:#fff;border:1px solid var(--line);color:var(--muted)}
+  .toggle button.on{background:var(--sage);color:#fff;border-color:var(--sage)}
+
+  .post-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+  .post-nick{font-weight:500;font-size:14px}
+  .post-time{font-size:11px;color:#A3AB9E}
+  .post-ans{font-size:14px;line-height:1.6;white-space:pre-line}
+  .acts{display:flex;gap:8px;margin-top:11px}
+  .rx{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;
+    padding:6px 11px;font-size:13px;color:var(--muted);font-weight:400;cursor:pointer;font-family:inherit}
+  .rx.on{border-color:#BCD3B6;background:var(--sage-soft);color:var(--sage-deep);font-weight:500}
+  .rx.self{cursor:default;opacity:.55}
+  .cbox{border-top:1px solid var(--line2);margin-top:12px;padding-top:11px}
+  .cmt{display:flex;gap:8px;margin-bottom:9px}
+  .cmt .who{font-weight:500;font-size:13px;color:var(--sage-deep);white-space:nowrap}
+  .cmt .txt{font-size:13px;color:#46513f;line-height:1.5}
+  .crow{display:flex;gap:7px}
+  .crow input{font-size:13px;padding:9px 11px}
+  .crow button{background:#fff;border:1px solid #D4E0CF;color:var(--muted);font-family:inherit;font-size:13px;padding:0 14px;cursor:pointer;white-space:nowrap}
+
+  .rank-head{display:flex;align-items:center;gap:9px;font-size:13px;cursor:pointer}
+  .rank-head .ti{color:var(--sage-deep)}
+  .rank-list{margin-top:12px}
+  .rank-item{display:flex;align-items:center;gap:11px;padding:8px 0;border-top:1px solid var(--line2)}
+  .rank-no{width:24px;height:24px;background:var(--sage-soft);color:var(--sage-deep);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .rank-no.top{background:var(--sage);color:#fff}
+  .rank-nick{flex:1;font-size:14px}
+  .rank-pt{font-weight:500;color:var(--sage-deep);font-size:14px}
+
+  .cta{background:var(--sage-deep);color:#fff;margin:11px 12px;padding:21px 18px}
+  .cta .t{font-size:16px;margin-bottom:5px}
+  .cta p{font-size:13px;opacity:.92;margin-bottom:14px}
+  .cta a{display:inline-block;background:#fff;color:var(--sage-deep);font-weight:500;font-size:14px;padding:11px 18px}
+
+  .me{color:var(--sage-deep);font-weight:500}
+  .empty{color:var(--muted);font-size:13.5px;text-align:center;padding:18px 0}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(18px);background:var(--ink);
+    color:#fff;padding:11px 19px;font-size:14px;font-weight:400;opacity:0;transition:.25s;z-index:50;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  i.ti{font-style:normal}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav">
+    <div class="brand"><span class="logo">▶</span><b>결영이네 재테크 끝판왕 <span style="color:var(--muted);font-weight:400">[원팀 프로젝트]</span></b></div>
+    <a class="navlink" id="navDetail" href="#" target="_blank" rel="noopener">원팀프로젝트 자세히 보기 ›</a>
+  </div>
+
+  <!-- 상단 현황 칸 -->
+  <div class="card" style="padding:0">
+    <div class="stat">
+      <div><div class="cap">오늘 참여</div><div class="num"><span id="sToday">0</span><small>명</small></div></div>
+      <div><div class="cap">누적 제출</div><div class="num"><span id="sSubs">0</span><small>개</small></div></div>
+    </div>
+    <div class="me-line" id="meLine">닉네임을 적으면 내 현황이 보여요</div>
+  </div>
+
+  <!-- 오늘의 미션 + 제출 -->
+  <div class="card">
+    <span class="badge" id="dayBadge">잔소리 —</span>
+    <div class="hd mtitle" id="mTitle">오늘의 미션을 불러오는 중…</div>
+    <div class="prompt" id="mPrompt"></div>
+    <input id="nick" placeholder="매일 같은 닉네임으로 (예: 결영이네)" maxlength="20" />
+    <textarea id="answer" placeholder="여기에 답을 적어주세요. 짧아도 괜찮아요!"></textarea>
+    <button class="btn" id="submitBtn" onclick="submitAnswer()">제출하기</button>
+  </div>
+
+  <!-- 피드 -->
+  <div class="toggle">
+    <button id="tgToday" class="on" onclick="setFilter('today')">오늘 회차</button>
+    <button id="tgAll" onclick="setFilter('all')">전체</button>
+  </div>
+  <div id="feed"></div>
+
+  <!-- 랭킹 (접이식) -->
+  <div class="card">
+    <div class="rank-head" onclick="toggleRank()">
+      <i class="ti ti-trophy" aria-hidden="true"></i>
+      <span style="color:var(--muted)">랭킹</span>
+      <span id="rankPeek" style="font-weight:500"></span>
+      <span style="margin-left:auto;color:var(--muted)" id="rankToggle">전체보기 <i class="ti ti-chevron-down" aria-hidden="true"></i></span>
+    </div>
+    <div class="rank-list" id="rankList" style="display:none"></div>
+  </div>
+
+  <!-- 전환 CTA -->
+  <div class="cta">
+    <div class="hd t">혼자 하면 작심삼일, 같이 하면 됩니다</div>
+    <p>SNS 첫 세팅부터 우리 부부에게 맞는 수익화까지 — 원팀 프로젝트에서 끝까지 같이.</p>
+    <a id="ctaDetail" href="#" target="_blank" rel="noopener">원팀 프로젝트 보러가기 →</a>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== ⚙️ 설정 — 결영님이 바꾸는 곳 ===== */
+const GAS_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';                 // GAS 웹앱 배포 URL
+const DETAIL_PAGE_URL = 'https://oneteamm.netlify.app/?v=2';  // 원팀프로젝트 상세페이지(전환)
+const POINTS_PER = 10;
+/* 회차·미션 내용은 코드가 아니라 구글시트(missions/config)에서 관리됩니다. */
+
+let state = { currentDay: 0, missions: {}, rows: [], hearts: [], comments: [] };
+let feedFilter = 'today';
+let expanded = {};   // 댓글 펼침 상태 (key: day|author)
+let rankOpen = false;
+
+function $(id){return document.getElementById(id)}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function keyOf(day,author){return day+'|'+author}
+function me(){return ($('nick').value||localStorage.getItem('onetam_nick')||'').trim()}
+
+function initStatic(){
+  const url = (DETAIL_PAGE_URL.indexOf('PASTE_')===0)?'#':DETAIL_PAGE_URL;
+  $('navDetail').href=url; $('ctaDetail').href=url;
+  const n = localStorage.getItem('onetam_nick'); if(n) $('nick').value=n;
+}
+
+async function fetchAll(){
+  if(GAS_URL.indexOf('PASTE_')===0){renderMission();render();return}
+  try{
+    const r = await fetch(GAS_URL);
+    const d = await r.json();
+    state.currentDay = Number(d.currentDay)||1;
+    state.missions = {};
+    (d.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt}; });
+    state.rows = d.rows||[]; state.hearts = d.hearts||[]; state.comments = d.comments||[];
+  }catch(e){ /* keep */ }
+  renderMission(); render();
+}
+
+function renderMission(){
+  const day = state.currentDay||0;
+  const m = state.missions[day] || {title:'미션을 준비 중이에요', prompt:''};
+  $('dayBadge').textContent = '잔소리 '+day+'일차';
+  $('mTitle').textContent = m.title;
+  $('mPrompt').textContent = m.prompt;
+}
+
+async function submitAnswer(){
+  const nickname = $('nick').value.trim(), answer = $('answer').value.trim();
+  if(!nickname){toast('먼저 닉네임을 적어주세요');return}
+  if(!answer){toast('답을 적어주세요');return}
+  if(GAS_URL.indexOf('PASTE_')===0){toast('GAS_URL을 먼저 연결하세요');return}
+  localStorage.setItem('onetam_nick', nickname);
+  const b=$('submitBtn'); b.disabled=true; b.textContent='제출 중…';
+  try{
+    await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'submit',nickname,day:state.currentDay,answer})});
+    $('answer').value=''; toast('제출 완료! 같이 해줘서 고마워요');
+    await fetchAll();
+  }catch(e){ toast('전송 오류 — 잠시 후 다시 시도'); }
+  finally{ b.disabled=false; b.textContent='제출하기'; }
+}
+
+/* 하트 */
+function heartCount(day,author){return state.hearts.filter(h=>Number(h.day)===Number(day)&&h.author===author).length}
+function hasHearted(day,author,m){return state.hearts.some(h=>Number(h.day)===Number(day)&&h.author===author&&h.voter===m)}
+async function toggleHeart(day,author){
+  const m=me();
+  if(!m){toast('먼저 닉네임을 저장해주세요');return}
+  if(author===m){toast('내 답변엔 하트를 못 눌러요');return}
+  if(GAS_URL.indexOf('PASTE_')===0)return;
+  const i=state.hearts.findIndex(h=>Number(h.day)===Number(day)&&h.author===author&&h.voter===m);
+  if(i>=0)state.hearts.splice(i,1);else state.hearts.push({day:Number(day),author,voter:m});
+  render();
+  try{await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'heart',day:Number(day),author,voter:m})});}catch(e){}
+  fetchAll();
+}
+
+/* 댓글 */
+function commentsFor(day,author){return state.comments.filter(c=>Number(c.day)===Number(day)&&c.author===author);}
+function toggleCmt(day,author){const k=keyOf(day,author);expanded[k]=!expanded[k];render();}
+async function sendComment(day,author,inputEl){
+  const m=me(); const text=(inputEl.value||'').trim();
+  if(!m){toast('먼저 닉네임을 저장해주세요');return}
+  if(!text){toast('댓글을 적어주세요');return}
+  if(GAS_URL.indexOf('PASTE_')===0)return;
+  state.comments.push({day:Number(day),author,commenter:m,text,t:new Date().toISOString()});
+  render();
+  try{await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'comment',day:Number(day),author,commenter:m,text})});}catch(e){}
+  fetchAll();
+}
+
+/* 집계 */
+function aggregate(){
+  const map={};
+  state.rows.forEach(r=>{const k=r.nickname;if(!map[k])map[k]={nickname:k,days:new Set(),last:0};
+    map[k].days.add(Number(r.day));const tt=new Date(r.t).getTime()||0;if(tt>map[k].last)map[k].last=tt;});
+  const arr=Object.values(map).map(u=>{const d=[...u.days].sort((a,b)=>a-b);
+    return {nickname:u.nickname,attend:d.length,streak:streak_(d),points:d.length*POINTS_PER,last:u.last};});
+  arr.sort((a,b)=>b.points-a.points||b.last-a.last);
+  return arr;
+}
+function streak_(days){let best=0,cur=0,prev=null;days.forEach(d=>{cur=(prev!==null&&d===prev+1)?cur+1:1;if(cur>best)best=cur;prev=d;});return best}
+
+function render(){
+  const m=me(), agg=aggregate();
+
+  $('sToday').textContent=new Set(state.rows.filter(r=>Number(r.day)===state.currentDay).map(r=>r.nickname)).size;
+  $('sSubs').textContent=state.rows.length;
+  const mine=agg.find(u=>u.nickname===m), rank=mine?agg.findIndex(u=>u.nickname===m)+1:0;
+  $('meLine').innerHTML = mine
+    ? ('나 : '+mine.attend+'회 참여 · 연속 '+mine.streak+'일 · '+mine.points+'p · <b>'+rank+'위</b>')
+    : (m?'아직 참여 전이에요. 첫 제출 ㄱㄱ!':'닉네임을 적으면 내 현황이 보여요');
+
+  // 피드
+  let rows=state.rows.slice();
+  if(feedFilter==='today')rows=rows.filter(r=>Number(r.day)===state.currentDay);
+  rows.sort((a,b)=>(new Date(b.t).getTime()||0)-(new Date(a.t).getTime()||0));
+  const feed=$('feed');
+  feed.innerHTML = rows.length? rows.slice(0,80).map(r=>postHtml(r,m)).join('')
+    : '<div class="card"><div class="empty">아직 답변이 없어요. 1등으로 남겨보세요!</div></div>';
+
+  // 랭킹
+  $('rankPeek').textContent = agg.slice(0,2).map((u,i)=>(i+1)+' '+u.nickname+' '+u.points+'p').join('  ·  ');
+  const rl=$('rankList');
+  rl.style.display = rankOpen?'block':'none';
+  $('rankToggle').innerHTML = rankOpen?'접기 <i class="ti ti-chevron-up"></i>':'전체보기 <i class="ti ti-chevron-down"></i>';
+  rl.innerHTML = agg.length? agg.slice(0,20).map((u,i)=>{
+    const isMe=u.nickname===m;
+    return '<div class="rank-item"><div class="rank-no '+(i<3?'top':'')+'">'+(i+1)+'</div>'+
+      '<div class="rank-nick '+(isMe?'me':'')+'">'+esc(u.nickname)+(isMe?' (나)':'')+'</div>'+
+      '<div class="rank-pt">'+u.points+'p</div></div>';
+  }).join('') : '<div class="empty">곧 채워질 거예요 :)</div>';
+}
+
+function postHtml(r,m){
+  const isMe=r.nickname===m;
+  const hc=heartCount(r.day,r.nickname), on=m&&hasHearted(r.day,r.nickname,m);
+  const cs=commentsFor(r.day,r.nickname), k=keyOf(r.day,r.nickname), open=!!expanded[k];
+  const heart = isMe
+    ? '<span class="rx self"><i class="ti ti-heart"></i> '+hc+'</span>'
+    : '<button class="rx'+(on?' on':'')+'" data-act="heart" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'"><i class="ti ti-heart"></i> '+hc+'</button>';
+  const cbtn = '<button class="rx'+(cs.length?' on':'')+'" data-act="ctoggle" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'"><i class="ti ti-message-circle"></i> '+cs.length+'</button>';
+  let cbox='';
+  if(open){
+    const list = cs.map(c=>'<div class="cmt"><span class="who">'+esc(c.commenter)+'</span><span class="txt">'+esc(c.text)+'</span></div>').join('');
+    cbox = '<div class="cbox">'+list+
+      '<div class="crow"><input data-act="cinput" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'" placeholder="댓글 달기…"/>'+
+      '<button data-act="csend" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'">게시</button></div></div>';
+  }
+  return '<div class="card"><div class="post-top"><span class="post-nick '+(isMe?'me':'')+'">'+esc(r.nickname)+(isMe?' (나)':'')+'</span>'+
+    '<span class="post-time">'+(feedFilter==='all'?(r.day+'일차 · '):'')+timeAgo(r.t)+'</span></div>'+
+    '<div class="post-ans">'+esc(r.answer)+'</div>'+
+    '<div class="acts">'+heart+cbtn+'</div>'+cbox+'</div>';
+}
+
+function setFilter(f){feedFilter=f;$('tgToday').classList.toggle('on',f==='today');$('tgAll').classList.toggle('on',f==='all');render()}
+function toggleRank(){rankOpen=!rankOpen;render()}
+function timeAgo(t){const d=new Date(t).getTime();if(!d)return'';const x=(Date.now()-d)/1000;
+  if(x<60)return'방금';if(x<3600)return Math.floor(x/60)+'분 전';if(x<86400)return Math.floor(x/3600)+'시간 전';return Math.floor(x/86400)+'일 전'}
+
+$('feed').addEventListener('click',function(ev){
+  const el=ev.target.closest('[data-act]'); if(!el)return;
+  const act=el.dataset.act, day=Number(el.dataset.day), author=el.dataset.author;
+  if(act==='heart')toggleHeart(day,author);
+  else if(act==='ctoggle')toggleCmt(day,author);
+  else if(act==='csend'){const inp=el.parentNode.querySelector('[data-act="cinput"]');sendComment(day,author,inp);}
+});
+
+initStatic(); render(); fetchAll();
+</script>
+</body>
+</html>
