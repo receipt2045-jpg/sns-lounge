@@ -173,17 +173,23 @@ function initStatic(){
   const n = localStorage.getItem('onetam_nick'); if(n) $('nick').value=n;
 }
 
-async function fetchAll(){
+function fetchAll(){
   if(GAS_URL.indexOf('PASTE_')===0){renderMission();render();return}
-  try{
-    const r = await fetch(GAS_URL);
-    const d = await r.json();
-    state.currentDay = Number(d.currentDay)||1;
-    state.missions = {};
-    (d.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt}; });
-    state.rows = d.rows||[]; state.hearts = d.hearts||[]; state.comments = d.comments||[];
-  }catch(e){ /* keep */ }
-  renderMission(); render();
+  const cb='__lc'+Date.now();
+  const s=document.createElement('script');
+  window[cb]=function(d){
+    try{
+      state.currentDay=Number(d.currentDay)||1;
+      state.missions={};
+      (d.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt}; });
+      state.rows=d.rows||[]; state.hearts=d.hearts||[]; state.comments=d.comments||[];
+    }catch(e){}
+    renderMission(); render();
+    try{delete window[cb];}catch(e){} if(s.parentNode)s.parentNode.removeChild(s);
+  };
+  s.src=GAS_URL+'?callback='+cb+'&t='+Date.now();
+  s.onerror=function(){ renderMission(); render(); try{delete window[cb];}catch(e){} if(s.parentNode)s.parentNode.removeChild(s); };
+  document.body.appendChild(s);
 }
 
 function renderMission(){
@@ -202,7 +208,7 @@ async function submitAnswer(){
   localStorage.setItem('onetam_nick', nickname);
   const b=$('submitBtn'); b.disabled=true; b.textContent='제출 중…';
   try{
-    await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'submit',nickname,day:state.currentDay,answer})});
+    await fetch(GAS_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:'submit',nickname,day:state.currentDay,answer})});
     $('answer').value=''; toast('제출 완료! 같이 해줘서 고마워요');
     await fetchAll();
   }catch(e){ toast('전송 오류 — 잠시 후 다시 시도'); }
@@ -220,7 +226,7 @@ async function toggleHeart(day,author){
   const i=state.hearts.findIndex(h=>Number(h.day)===Number(day)&&h.author===author&&h.voter===m);
   if(i>=0)state.hearts.splice(i,1);else state.hearts.push({day:Number(day),author,voter:m});
   render();
-  try{await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'heart',day:Number(day),author,voter:m})});}catch(e){}
+  try{await fetch(GAS_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:'heart',day:Number(day),author,voter:m})});}catch(e){}
   fetchAll();
 }
 
@@ -234,7 +240,7 @@ async function sendComment(day,author,inputEl){
   if(GAS_URL.indexOf('PASTE_')===0)return;
   state.comments.push({day:Number(day),author,commenter:m,text,t:new Date().toISOString()});
   render();
-  try{await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'comment',day:Number(day),author,commenter:m,text})});}catch(e){}
+  try{await fetch(GAS_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({action:'comment',day:Number(day),author,commenter:m,text})});}catch(e){}
   fetchAll();
 }
 
