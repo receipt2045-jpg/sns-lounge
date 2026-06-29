@@ -4,6 +4,14 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>결영이네 재테크 끝판왕 [원팀 프로젝트]</title>
+<!-- 링크 공유 미리보기 (카톡 등) — 문구/이미지는 여기서 수정 -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="결영의 줍줍 · 신혼부부 SNS 라운지" />
+<meta property="og:description" content="요즘 터진 콘텐츠, 왜 터졌는지 풀어드려요 💚 오늘의 줍줍 보러 오세요!" />
+<meta property="og:url" content="https://receipt2045-jpg.github.io/sns-lounge/" />
+<!-- 썸네일 이미지: 아래 thumb.png를 저장소에 올리면 미리보기 이미지로 떠요 (권장 1200x630) -->
+<meta property="og:image" content="https://receipt2045-jpg.github.io/sns-lounge/thumb.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
@@ -155,10 +163,10 @@
   <!-- 랭킹 (접이식) -->
   <div class="card">
     <div class="rank-head" onclick="toggleRank()">
-      <i class="ti ti-trophy" aria-hidden="true"></i>
+      <span aria-hidden="true">🏆</span>
       <span style="color:var(--muted)">랭킹</span>
       <span id="rankPeek" style="font-weight:500"></span>
-      <span style="margin-left:auto;color:var(--muted)" id="rankToggle">전체보기 <i class="ti ti-chevron-down" aria-hidden="true"></i></span>
+      <span style="margin-left:auto;color:var(--muted)" id="rankToggle">전체보기 ▾</span>
     </div>
     <div class="rank-list" id="rankList" style="display:none"></div>
   </div>
@@ -238,7 +246,7 @@ function renderMission(){
   $('mTitle').textContent = m.title;
   $('mPrompt').innerHTML = fmtPrompt(m.prompt);
   let lk='';
-  if(m.reelUrl) lk += '<a href="'+esc(m.reelUrl)+'" target="_blank" rel="noopener">▶ 원본 릴스 보기</a>';
+  if(m.reelUrl){ var ru=String(m.reelUrl).replace('/reel/','/p/'); lk += '<a href="'+esc(ru)+'" target="_blank" rel="noopener">▶ 원본 릴스 보기</a>'; }
   if(m.cafeUrl) lk += '<a class="solid" href="'+esc(m.cafeUrl)+'" target="_blank" rel="noopener">📘 왜 터졌는지 카페에서 ›</a>';
   $('jLinks').innerHTML = lk;
   if(m.taskPrompt) $('taskPrompt').textContent = m.taskPrompt;
@@ -322,7 +330,7 @@ function render(){
   $('rankPeek').textContent = agg.slice(0,2).map((u,i)=>(i+1)+' '+u.nickname+' '+u.points+'p').join('  ·  ');
   const rl=$('rankList');
   rl.style.display = rankOpen?'block':'none';
-  $('rankToggle').innerHTML = rankOpen?'접기 <i class="ti ti-chevron-up"></i>':'전체보기 <i class="ti ti-chevron-down"></i>';
+  $('rankToggle').innerHTML = rankOpen?'접기 ▴':'전체보기 ▾';
   rl.innerHTML = agg.length? agg.slice(0,20).map((u,i)=>{
     const isMe=u.nickname===m;
     return '<div class="rank-item"><div class="rank-no '+(i<3?'top':'')+'">'+(i+1)+'</div>'+
@@ -336,9 +344,9 @@ function postHtml(r,m){
   const hc=heartCount(r.day,r.nickname), on=m&&hasHearted(r.day,r.nickname,m);
   const cs=commentsFor(r.day,r.nickname), k=keyOf(r.day,r.nickname), open=!!expanded[k];
   const heart = isMe
-    ? '<span class="rx self"><i class="ti ti-heart"></i> '+hc+'</span>'
-    : '<button class="rx'+(on?' on':'')+'" data-act="heart" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'"><i class="ti ti-heart"></i> '+hc+'</button>';
-  const cbtn = '<button class="rx'+(cs.length?' on':'')+'" data-act="ctoggle" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'"><i class="ti ti-message-circle"></i> '+cs.length+'</button>';
+    ? '<span class="rx self">🤍 '+hc+'</span>'
+    : '<button class="rx'+(on?' on':'')+'" data-act="heart" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'">🤍 '+hc+'</button>';
+  const cbtn = '<button class="rx'+(cs.length?' on':'')+'" data-act="ctoggle" data-day="'+r.day+'" data-author="'+esc(r.nickname)+'">💬 '+cs.length+'</button>';
   let cbox='';
   if(open){
     const list = cs.map(c=>'<div class="cmt"><span class="who">'+esc(c.commenter)+'</span><span class="txt">'+esc(c.text)+'</span></div>').join('');
