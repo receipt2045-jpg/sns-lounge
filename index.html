@@ -232,7 +232,7 @@ let state = { currentDay: 1, missions: { 1: {
   reelUrl: 'https://www.instagram.com/p/DZAbPa4RY0o/',
   cafeUrl: '',
   taskPrompt: '"나는 ___한 신혼부부다" 한 문장으로! (숫자 넣으면 +10점)'
-} }, rows: [], hearts: [], comments: [] };
+} }, rows: [], hearts: [], comments: [], fetched: false };
 let feedFilter = 'today';
 let expanded = {};   // 댓글 펼침 상태 (key: day|author)
 let rankOpen = false;
@@ -259,6 +259,8 @@ function fetchAll(){
       state.missions={};
       (d.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt,reelUrl:m.reelUrl||'',cafeUrl:m.cafeUrl||'',taskPrompt:m.taskPrompt||''}; });
       state.rows=d.rows||[]; state.hearts=d.hearts||[]; state.comments=d.comments||[];
+      state.fetched=true;
+      try{localStorage.setItem('onetam_cache', JSON.stringify(d));}catch(e){}
     }catch(e){}
     renderMission(); render();
     try{delete window[cb];}catch(e){} if(s.parentNode)s.parentNode.removeChild(s);
@@ -368,7 +370,8 @@ function render(){
   rows.sort((a,b)=>(new Date(b.t).getTime()||0)-(new Date(a.t).getTime()||0));
   const feed=$('feed');
   feed.innerHTML = rows.length? rows.slice(0,80).map(r=>postHtml(r,m)).join('')
-    : '<div class="card"><div class="empty">아직 답변이 없어요. 1등으로 남겨보세요!</div></div>';
+    : (state.fetched ? '<div class="card"><div class="empty">아직 답변이 없어요. 1등으로 남겨보세요!</div></div>'
+                     : '<div class="card"><div class="empty">답변 불러오는 중…</div></div>');
 
   // 랭킹
   $('rankPeek').textContent = agg.slice(0,2).map((u,i)=>(i+1)+' '+u.nickname+' '+u.points+'p').join('  ·  ');
@@ -417,7 +420,17 @@ $('feed').addEventListener('click',function(ev){
   else if(act==='csend'){const inp=el.parentNode.querySelector('[data-act="cinput"]');sendComment(day,author,inp);}
 });
 
-initStatic(); renderMission(); render(); fetchAll();
+function loadCache(){
+  try{
+    var c=JSON.parse(localStorage.getItem('onetam_cache')||'null');
+    if(c){
+      if(Number(c.currentDay)) state.currentDay=Number(c.currentDay);
+      if(c.missions&&c.missions.length){ state.missions={}; (c.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt,reelUrl:m.reelUrl||'',cafeUrl:m.cafeUrl||'',taskPrompt:m.taskPrompt||''}; }); }
+      state.rows=c.rows||[]; state.hearts=c.hearts||[]; state.comments=c.comments||[];
+    }
+  }catch(e){}
+}
+initStatic(); loadCache(); renderMission(); render(); fetchAll();
 </script>
 </body>
 </html>
