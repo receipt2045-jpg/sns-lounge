@@ -247,7 +247,7 @@ function renderMission(){
   $('mPrompt').innerHTML = fmtPrompt(m.prompt);
   let lk='';
   if(m.reelUrl){ var ru=String(m.reelUrl).replace('/reel/','/p/'); lk += '<a href="'+esc(ru)+'" target="_blank" rel="noopener">▶ 원본 릴스 보기</a>'; }
-  if(m.cafeUrl) lk += '<a class="solid" href="'+esc(m.cafeUrl)+'" target="_blank" rel="noopener">📘 왜 터졌는지 카페에서 ›</a>';
+  if(m.cafeUrl) lk += '<a class="solid" href="'+esc(m.cafeUrl)+'" target="_blank" rel="noopener">📘 분석 리포트 다운 받기 (원팀플 멤버 전용)</a>';
   $('jLinks').innerHTML = lk;
   if(m.taskPrompt) $('taskPrompt').textContent = m.taskPrompt;
 }
