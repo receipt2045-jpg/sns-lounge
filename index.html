@@ -207,7 +207,32 @@ const DETAIL_PAGE_URL = 'https://oneteamm.netlify.app/?v=2';  // 원팀프로젝
 const POINTS_PER = 10;
 /* 회차·미션 내용은 코드가 아니라 구글시트(missions/config)에서 관리됩니다. */
 
-let state = { currentDay: 0, missions: {}, rows: [], hearts: [], comments: [] };
+/* ⚡ 즉시 표시용 '오늘의 줍줍' (GAS 응답 오면 자동 갱신됨). 새 줍줍 올릴 땐 이 부분 교체. */
+let state = { currentDay: 1, missions: { 1: {
+  title: '정체성에 숫자를 박으면 터진다',
+  prompt: `📌 오늘의 콘텐츠
+저랑 같이 계정 키운 @dadoni_ya님의
+"월 700 버는 20대 신혼부부,
+5월 가계부" 콘텐츠가 대박이 났어요!
+팔로워가 2.3만인데 조회수가
+46.5만 회나 나왔거든요.
+무려 20배나 터진 거죠! 👀
+🔍 왜 터졌을까?
+① 멈춤 — 첫 화면에 "월 700 버는 20대 신혼부부"라고 딱 박아두니까, 비슷한 처지에 있는 분들이 스크롤을 안 멈출 수가 없었던 거예요. 명확한 숫자와 정체성이 주는 힘인 거죠.
+② 공감 — 가계부를 숫자까지 솔직하게 공개하니까 "식비 20만 원으로 어떻게 살아요?" 같은 질문이 댓글로 줄줄이 달렸어요. 타깃은 좁히고 숫자는 확실하게 보여주니까 다들 '완전 내 얘기'라며 몰입한 거예요.
+③ 전환 — 그렇게 터진 댓글들이 알고리즘을 제대로 밀어줬어요. "댓글 달아달라"고 억지로 유도하지 않았는데도 말이죠.
+✍️ 한 줄 정리
+내 정체성에 '구체적인' 숫자를 넣는 순간,
+비슷한 고민을 가진 사람들이
+"이거 내 얘기네!" 하고 모여들게 됩니다.
+💡 이렇게 써먹어요
+· 재테크 → "월 700 버는 20대 신혼부부"
+· 집밥 → "한 끼 5천원 신혼집밥 1년차"
+· 살림 → "5평 신혼집에서 1년 7천 모으는 부부"`,
+  reelUrl: 'https://www.instagram.com/p/DZAbPa4RY0o/',
+  cafeUrl: '',
+  taskPrompt: '"나는 ___한 신혼부부다" 한 문장으로! (숫자 넣으면 +10점)'
+} }, rows: [], hearts: [], comments: [] };
 let feedFilter = 'today';
 let expanded = {};   // 댓글 펼침 상태 (key: day|author)
 let rankOpen = false;
@@ -392,7 +417,7 @@ $('feed').addEventListener('click',function(ev){
   else if(act==='csend'){const inp=el.parentNode.querySelector('[data-act="cinput"]');sendComment(day,author,inp);}
 });
 
-initStatic(); render(); fetchAll();
+initStatic(); renderMission(); render(); fetchAll();
 </script>
 </body>
 </html>
