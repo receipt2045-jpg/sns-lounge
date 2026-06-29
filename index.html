@@ -57,11 +57,15 @@
   textarea{resize:vertical;min-height:74px;margin-top:9px}
   .btn{width:100%;background:var(--sage);color:#fff;font-weight:500;font-size:15px;border:none;padding:13px;margin-top:10px;cursor:pointer;font-family:inherit}
   .btn:active{opacity:.9} .btn:disabled{background:#BBD0B6}
-  .jlinks{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
-  .jlinks a{flex:1;min-width:140px;text-align:center;border:1px solid var(--line);background:#fff;
-    color:var(--sage-deep);font-weight:500;font-size:13px;padding:11px 10px;cursor:pointer}
+  .jlinks{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+  .jlinks a{flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;text-align:center;
+    min-height:48px;border:1px solid var(--line);background:#fff;
+    color:var(--sage-deep);font-weight:500;font-size:13px;padding:10px 12px;cursor:pointer;line-height:1.35}
   .jlinks a.solid{background:var(--sage-soft);border-color:#BCD3B6}
   .jlinks a:active{opacity:.85}
+  .intro{background:var(--sage-soft)}
+  .intro-t{font-family:'Pretendard Variable',Pretendard,sans-serif;font-weight:800;font-size:16px;color:var(--sage-deep);margin-bottom:7px}
+  .intro p{font-size:13.5px;line-height:1.66;color:#3C4A37;margin:5px 0}
   /* 줍줍 본문 — 소제목 구역 분리 + 가독성 */
   #mPrompt{background:transparent;padding:0;white-space:normal;margin-top:6px}
   .jhead{font-family:'Pretendard Variable',Pretendard,sans-serif;font-weight:800;font-size:15px;
@@ -127,6 +131,14 @@
     <a class="navlink" id="navDetail" href="#" target="_blank" rel="noopener">원팀프로젝트 자세히 보기 ›</a>
   </div>
 
+  <!-- 안내: 여기 뭐 하는 곳 -->
+  <div class="card intro">
+    <div class="intro-t">여긴 뭐 하는 곳? 🔍</div>
+    <p>요즘 <b>잘 터진 콘텐츠</b>를 결영이 매번 뜯어서, <b>왜 터졌는지</b>를 신혼부부 버전으로 풀어드려요. 그게 바로 <b>'오늘의 줍줍'</b>이에요.</p>
+    <p>왜 봐야 하냐고요? 터지는 '구조'를 알면 <b>내 릴스도 터지거든요.</b> 감이 아니라 공식이에요.</p>
+    <p>그냥 읽고 끝내지 말고 👉 아래 <b>'직접 해보기'</b> 칸에서 내 버전으로 한 줄 바꿔 올려보세요. 결영이 골라서 첨삭해드려요!</p>
+  </div>
+
   <!-- 상단 현황 칸 -->
   <div class="card" style="padding:0">
     <div class="stat">
@@ -146,8 +158,8 @@
 
   <!-- ⓑ 오늘 너의 차례 (제출) -->
   <div class="card">
-    <div class="hd mtitle">오늘 너의 차례 ✍️</div>
-    <div class="prompt" id="taskPrompt">네 계정은 어느 쪽이야? 우리집 첫 문장 하나만 적어줘요.</div>
+    <div class="hd mtitle">직접 해보기 ✍️</div>
+    <div class="prompt" id="taskPrompt">위 공식대로 내 계정 첫 문장을 한 줄 바꿔서 올려보세요.</div>
     <input id="nick" placeholder="매일 같은 닉네임으로 (예: 결영이네)" maxlength="20" />
     <textarea id="answer" placeholder="우리집 첫 문장 적기 (예: 5평 신혼집에서…)"></textarea>
     <button class="btn" id="submitBtn" onclick="submitAnswer()">올리기</button>
@@ -155,7 +167,7 @@
 
   <!-- 피드 -->
   <div class="toggle">
-    <button id="tgToday" class="on" onclick="setFilter('today')">오늘 회차</button>
+    <button id="tgToday" class="on" onclick="setFilter('today')">오늘 줍줍</button>
     <button id="tgAll" onclick="setFilter('all')">전체</button>
   </div>
   <div id="feed"></div>
