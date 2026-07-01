@@ -256,12 +256,10 @@ function fetchAll(){
   const s=document.createElement('script');
   window[cb]=function(d){
     try{
-      state.currentDay=Number(d.currentDay)||1;
-      state.missions={};
-      (d.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt,reelUrl:m.reelUrl||'',cafeUrl:m.cafeUrl||'',taskPrompt:m.taskPrompt||''}; });
+      // 미션·오늘 회차는 이 파일(baked)이 기준. GAS에선 답변·하트·댓글만 받음.
       state.rows=d.rows||[]; state.hearts=d.hearts||[]; state.comments=d.comments||[];
       state.fetched=true;
-      try{localStorage.setItem('onetam_cache', JSON.stringify(d));}catch(e){}
+      try{localStorage.setItem('onetam_cache', JSON.stringify({rows:state.rows,hearts:state.hearts,comments:state.comments}));}catch(e){}
     }catch(e){}
     renderMission(); render();
     try{delete window[cb];}catch(e){} if(s.parentNode)s.parentNode.removeChild(s);
@@ -425,8 +423,7 @@ function loadCache(){
   try{
     var c=JSON.parse(localStorage.getItem('onetam_cache')||'null');
     if(c){
-      if(Number(c.currentDay)) state.currentDay=Number(c.currentDay);
-      if(c.missions&&c.missions.length){ state.missions={}; (c.missions||[]).forEach(m=>{ state.missions[m.day]={title:m.title,prompt:m.prompt,reelUrl:m.reelUrl||'',cafeUrl:m.cafeUrl||'',taskPrompt:m.taskPrompt||''}; }); }
+      // 미션·오늘 회차는 baked 기준. 캐시에선 답변·하트·댓글만 복원.
       state.rows=c.rows||[]; state.hearts=c.hearts||[]; state.comments=c.comments||[];
     }
   }catch(e){}
